@@ -8,7 +8,7 @@ export function LateralColumn({
   onSeatClick,
 }: LateralColumnProps) {
   return (
-    <div className="flex flex-col gap-1 items-center">
+    <div className="flex flex-col gap-1 items-center mt-9 gap-6.5">
       <div className="text-xs font-bold mb-1">{side}</div>
       {seats.map((seat, index) => (
         <Seat

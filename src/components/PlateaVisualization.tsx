@@ -31,7 +31,7 @@ export function PlateaVisualization({
           maxHeight: "calc(100vh - 200px)",
         }}
       >
-        <ZoomableContainer minZoom={0.5} maxZoom={3} initialZoom={1}>
+        <ZoomableContainer minZoom={0.3} maxZoom={3} initialZoom={0.3}>
           {/* Container principale con laterali */}
           <div className="flex gap-2 md:gap-4 justify-center items-start min-w-max px-2 md:px-4 pb-4">
             {/* Laterale sinistra (verticale) */}
@@ -45,7 +45,7 @@ export function PlateaVisualization({
             </div>
 
             {/* Sezioni principali - ogni fila è una sola fila con posti dispari a sinistra e pari a destra */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 ml-10 mr-10">
               {/* Primo settore (file 1-8) */}
               <div className="mb-6">
                 <div className="text-xs font-bold mb-2 text-center">

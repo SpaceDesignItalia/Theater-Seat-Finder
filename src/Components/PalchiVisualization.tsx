@@ -35,7 +35,7 @@ export function PalchiVisualization({
           maxHeight: "calc(100vh - 200px)",
         }}
       >
-        <ZoomableContainer minZoom={0.5} maxZoom={3} initialZoom={1}>
+        <ZoomableContainer minZoom={0.5} maxZoom={3} initialZoom={0.5}>
           {/* Container principale con i palchi */}
           <div className="flex gap-4 md:gap-6 justify-center items-start min-w-max px-2 md:px-4 pb-4">
             {Array.from({ length: 10 }, (_, i) => (i + 1).toString()).map(

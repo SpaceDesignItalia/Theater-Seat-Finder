@@ -79,7 +79,7 @@ export function getValidSeats(row: string, stage: string): string[] {
 
       case "DX":
         // FILA LATERALE: DX, posti da 2 a 26 (+12bis)
-        for (let i = 2; i <= 26; i++) {
+        for (let i = 2; i <= 26; i += 2) {
           seats.push(i.toString());
         }
         seats.push("12Bis");
@@ -87,7 +87,7 @@ export function getValidSeats(row: string, stage: string): string[] {
 
       case "SX":
         // FILA LATERALE: SX, posti da 1 a 25 (+11bis e 19bis)
-        for (let i = 1; i <= 25; i++) {
+        for (let i = 1; i <= 25; i += 2) {
           seats.push(i.toString());
         }
         seats.push("11Bis");
