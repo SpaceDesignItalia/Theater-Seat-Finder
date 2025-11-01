@@ -36,18 +36,25 @@ export function PlateaVisualization({
           <div className="flex gap-2 md:gap-4 justify-center items-start min-w-max px-2 md:px-4 pb-4">
             {/* Laterale sinistra (verticale) */}
             <div className="flex-shrink-0">
-              <LateralColumn
-                side="SX"
-                seats={getRowSeats("SX")}
-                selectedSeats={selectedSeats}
-                onSeatClick={onSeatClick}
-              />
+              {" "}
+              <div className="h-12 w-1 bg-black ml-[-20px]" />
+              <div className="absolute h-12 w-1 bg-black mt-75 ml-[-20px]" />
+              <div className="mt-[-60px]">
+                <LateralColumn
+                  side="SX"
+                  seats={getRowSeats("SX")}
+                  selectedSeats={selectedSeats}
+                  onSeatClick={onSeatClick}
+                />{" "}
+                <div className="absolute h-1 w-12 bg-black mt-25 ml-6" />
+              </div>
             </div>
 
             {/* Sezioni principali - ogni fila è una sola fila con posti dispari a sinistra e pari a destra */}
             <div className="flex flex-col gap-2 ml-10 mr-10">
               {/* Primo settore (file 1-8) */}
               <div className="mb-6">
+                {" "}
                 <div className="text-xs font-bold mb-2 text-center">
                   1° settore
                 </div>
@@ -108,13 +115,23 @@ export function PlateaVisualization({
 
             {/* Laterale destra (verticale) */}
             <div className="flex-shrink-0">
-              <LateralColumn
-                side="DX"
-                seats={getRowSeats("DX")}
-                selectedSeats={selectedSeats}
-                onSeatClick={onSeatClick}
-              />
+              {" "}
+              <div className="h-12 w-0.5 bg-white" />
+              <div className="mt-[-60px]">
+                <LateralColumn
+                  side="DX"
+                  seats={getRowSeats("DX")}
+                  selectedSeats={selectedSeats}
+                  onSeatClick={onSeatClick}
+                />
+              </div>
             </div>
+          </div>
+          <div className="flex flex-row justify-end items-center gap-2 mr-4">
+            <div className="h-12 w-1 bg-black ml-4" />
+            <p className="text-xs md:text-sm text-gray-600">
+              Porte di ingresso
+            </p>
           </div>
         </ZoomableContainer>
       </div>

@@ -15,11 +15,23 @@ export function ZoomableContainer({
   maxZoom = 3,
   initialZoom = 1,
 }: ZoomableContainerProps) {
+  const [isMobile, setIsMobile] = useState(false);
   const [zoom, setZoom] = useState(initialZoom);
   const [isZooming, setIsZooming] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const lastTouchDistanceRef = useRef<number | null>(null);
+
+  // Rileva se siamo su mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint di Tailwind
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleZoomIn = () => {
     setZoom((prev) => Math.min(prev + 0.25, maxZoom));
@@ -33,8 +45,10 @@ export function ZoomableContainer({
     setZoom(initialZoom);
   };
 
-  // Gestione pinch-to-zoom
+  // Gestione pinch-to-zoom (solo su mobile)
   useEffect(() => {
+    if (!isMobile) return; // Disabilita zoom su desktop
+
     const container = containerRef.current;
     const content = contentRef.current;
 
@@ -89,7 +103,7 @@ export function ZoomableContainer({
       container.removeEventListener("touchend", handleTouchEnd);
       container.removeEventListener("touchcancel", handleTouchEnd);
     };
-  }, [minZoom, maxZoom]);
+  }, [minZoom, maxZoom, isMobile]);
 
   return (
     <div className="relative w-full">
@@ -139,10 +153,10 @@ export function ZoomableContainer({
           ref={contentRef}
           className="origin-top-left transition-transform duration-200 ease-out"
           style={{
-            transform: `scale(${zoom})`,
+            transform: isMobile ? `scale(${zoom})` : "scale(1)",
             transformOrigin: "top left",
-            width: `${100 / zoom}%`,
-            minHeight: `${100 / zoom}%`,
+            width: isMobile ? `${100 / zoom}%` : "100%",
+            minHeight: isMobile ? `${100 / zoom}%` : "auto",
           }}
         >
           {children}
