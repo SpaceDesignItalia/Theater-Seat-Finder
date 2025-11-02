@@ -32,7 +32,7 @@ export function GalleriaVisualization({
           maxHeight: "calc(100vh - 200px)",
         }}
       >
-        <ZoomableContainer minZoom={0.3} maxZoom={3} initialZoom={0.3}>
+        <ZoomableContainer minZoom={0.5} maxZoom={3} initialZoom={1}>
           {/* Container principale con laterali */}
           <div className="flex gap-2 md:gap-4 justify-center items-start min-w-max px-2 md:px-4 pb-4">
             {/* Laterale sinistra */}
@@ -55,11 +55,7 @@ export function GalleriaVisualization({
 
             {/* Sezioni principali */}
             <div className="flex flex-col gap-2">
-              <div className="h-26" />
-              <p className="text-xs font-bold mb-1 w-full text-center">
-                PLATEA
-              </p>
-              <div className="h-26" />
+              <div className="h-96" />
               {/* File principali A e 1-6 */}
               {["A", "1"].map((row) => (
                 <SeatRow

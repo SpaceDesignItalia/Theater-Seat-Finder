@@ -136,12 +136,14 @@ function App() {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col">
-      {/* Sezione superiore fissa con gradiente */}
-      <div className="flex flex-col items-center gap-3 md:gap-6 pt-3 md:pt-8 pb-3 md:pb-6 px-3 md:px-0 bg-gradient-to-b from-purple-50 via-white to-transparent">
-        <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-center justify-between w-full max-w-4xl mx-auto">
-          {currentStep > 0 && (
-            <div className="flex items-center justify-start w-full md:w-auto order-1">
+    <div className="h-screen w-screen flex flex-col overflow-hidden">
+      {/* Sezione superiore fissa con gradiente - altezza minima fissa */}
+      <div className="flex-shrink-0 flex flex-col items-center gap-2 md:gap-3 pt-3 md:pt-4 pb-2 md:pb-3 px-4 md:px-6 bg-gradient-to-b from-purple-50 via-white to-transparent">
+        {/* Container per Pulsante Indietro e Logo - layout orizzontale */}
+        <div className="flex items-center justify-between w-full max-w-4xl">
+          {/* Pulsante Indietro */}
+          <div className="min-w-[100px] flex items-center">
+            {currentStep > 0 && (
               <Button
                 onPress={() => {
                   if (currentStep === 2) {
@@ -152,24 +154,37 @@ function App() {
                 }}
                 variant="bordered"
                 size="sm"
-                className="min-w-fit"
                 startContent={
-                  <Icon
-                    icon="mdi:arrow-left"
-                    className="text-base md:text-lg"
-                  />
+                  <Icon icon="mdi:arrow-left" className="text-base" />
                 }
+                className="text-xs md:text-sm"
               >
                 Indietro
               </Button>
-            </div>
-          )}
-          <div className="flex-1 flex items-center justify-center w-full order-2">
+            )}
+          </div>
+
+          {/* Logo - centrato */}
+          <div className="flex justify-center">
+            <img
+              src="/logo.png"
+              alt="Logo Teatro"
+              className="h-20 md:h-28 object-contain drop-shadow-md"
+            />
+          </div>
+
+          {/* Spazio di bilanciamento */}
+          <div className="min-w-[100px]"></div>
+        </div>
+
+        {/* Navigazione e Steps */}
+        <div className="flex flex-col md:flex-row gap-2 items-center justify-center w-full max-w-4xl mx-auto px-2">
+          <div className="flex items-center justify-center w-full overflow-hidden">
             <RowSteps
               currentStep={currentStep}
               onStepChange={setCurrentStep}
               allowStepClick={false}
-              className="w-full max-w-md mx-auto"
+              className="w-full max-w-lg"
               steps={[
                 {
                   title: "Scelta posizione",
@@ -185,30 +200,28 @@ function App() {
           </div>
         </div>
 
+        {/* Sezione selezionata - compatta */}
         <AnimatePresence mode="wait">
           {selected && (
             <m.div
-              initial={{ opacity: 0, y: -20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.9 }}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
               transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 25,
-                duration: 0.4,
+                duration: 0.3,
               }}
-              className="flex flex-col items-center gap-3"
+              className="w-full max-w-4xl"
             >
-              <div className="flex items-center gap-2 md:gap-3 bg-white rounded-xl md:rounded-2xl shadow-lg px-4 md:px-6 py-3 md:py-4 border border-purple-100 w-full max-w-xs md:max-w-none">
+              <div className="flex items-center justify-center gap-2 md:gap-3 bg-white rounded-lg md:rounded-xl shadow-md px-3 md:px-4 py-2 md:py-3 border border-purple-100">
                 <Icon
                   icon={getSectionIcon(selected)}
-                  className="text-2xl md:text-3xl text-purple-600 flex-shrink-0"
+                  className="text-lg md:text-2xl text-purple-600 flex-shrink-0"
                 />
                 <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-[10px] md:text-xs font-medium text-gray-500 uppercase tracking-wide">
-                    Sezione selezionata
+                  <span className="text-[9px] md:text-[10px] font-medium text-gray-500 uppercase tracking-wide">
+                    Sezione
                   </span>
-                  <span className="text-lg md:text-xl font-bold text-purple-700 truncate">
+                  <span className="text-sm md:text-base font-bold text-purple-700 truncate">
                     {selected}
                   </span>
                 </div>
@@ -220,38 +233,16 @@ function App() {
                       setCurrentStep(0);
                       setSelected(null);
                     }}
-                    className="ml-2 md:ml-4 p-1.5 md:p-2 rounded-full hover:bg-purple-100 transition-colors flex-shrink-0"
+                    className="p-1 md:p-1.5 rounded-full hover:bg-purple-100 transition-colors flex-shrink-0"
                     title="Cambia sezione"
                   >
                     <Icon
                       icon="mdi:pencil"
-                      className="text-base md:text-lg text-purple-600"
+                      className="text-sm md:text-base text-purple-600"
                     />
                   </m.button>
                 )}
               </div>
-
-              {currentStep === 1 && (
-                <m.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <Chip
-                    color="secondary"
-                    variant="flat"
-                    size="sm"
-                    startContent={
-                      <Icon
-                        icon="mdi:information-outline"
-                        className="text-sm"
-                      />
-                    }
-                  >
-                    Puoi cambiare sezione in qualsiasi momento
-                  </Chip>
-                </m.div>
-              )}
             </m.div>
           )}
         </AnimatePresence>
@@ -311,12 +302,11 @@ function App() {
         {currentStep === 1 && stage && (
           <div className="w-full max-w-4xl">
             <div className="mb-6 md:mb-8">
-              <h1 className="text-2xl md:text-4xl font-bold text-center mb-4 md:mb-6 text-gray-800 px-2">
-                Seleziona Fila e Posto
-              </h1>
-
               {/* Controlli per la selezione */}
-              <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+              <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-10">
+                <h1 className="text-2xl md:text-4xl font-bold text-center mb-8 md:mb-10 text-gray-900 px-2">
+                  Seleziona fila e il posto
+                </h1>
                 <TheaterControls
                   selectedStage={stage}
                   selectedRow={selectedRow}
@@ -337,14 +327,14 @@ function App() {
                 />
 
                 {/* Bottone per aggiungere il posto */}
-                <div className="flex justify-center mt-4">
+                <div className="flex justify-center mt-8">
                   <Button
                     onPress={handleAddSeat}
                     color="primary"
-                    size="md"
-                    startContent={<Icon icon="mdi:plus" className="text-lg" />}
+                    size="lg"
+                    startContent={<Icon icon="mdi:plus" className="text-xl" />}
                     isDisabled={!selectedRow || !selectedSeat}
-                    className="min-w-[150px]"
+                    className="min-w-[180px] font-semibold shadow-md hover:shadow-lg transition-shadow"
                   >
                     Aggiungi Posto
                   </Button>
@@ -353,18 +343,19 @@ function App() {
 
               {/* Lista posti selezionati */}
               {selectedSeatsList.length > 0 && (
-                <m.div className="bg-white rounded-lg shadow-md p-4 md:p-6 mt-4">
-                  <h3 className="text-lg font-bold mb-3 text-center">
+                <m.div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-8 mt-6">
+                  <h3 className="text-xl md:text-2xl font-bold mb-5 text-center text-gray-900">
                     Posti Selezionati ({selectedSeatsList.length})
                   </h3>
-                  <div className="flex flex-wrap gap-2 justify-center">
+                  <div className="flex flex-wrap gap-3 justify-center">
                     {selectedSeatsList.map((seat, index) => (
                       <Chip
                         key={`${seat.row}-${seat.seat}-${index}`}
                         onClose={() => handleRemoveSeat(seat.row, seat.seat)}
                         variant="flat"
                         color="primary"
-                        size="md"
+                        size="lg"
+                        className="shadow-sm hover:shadow-md transition-shadow font-semibold"
                       >
                         {seat.row}-{seat.seat}
                       </Chip>
@@ -374,7 +365,7 @@ function App() {
               )}
 
               {/* Bottone per continuare */}
-              <div className="flex justify-center mt-6 md:mt-8">
+              <div className="flex justify-center mt-8">
                 <Button
                   onPress={() => {
                     if (selectedSeatsList.length > 0) {
@@ -385,9 +376,9 @@ function App() {
                   size="lg"
                   isDisabled={selectedSeatsList.length === 0}
                   endContent={
-                    <Icon icon="mdi:arrow-right" className="text-lg" />
+                    <Icon icon="mdi:arrow-right" className="text-xl" />
                   }
-                  className="min-w-[200px]"
+                  className="min-w-[220px] shadow-lg hover:shadow-xl transition-shadow font-bold text-lg"
                 >
                   Visualizza Mappa
                 </Button>
@@ -465,7 +456,7 @@ function App() {
 
             {/* Visualizzazione grafica della mappa */}
             {selectedSeatsList.length > 0 && (
-              <div className="mt-4 md:mt-6">
+              <div className="mt-4 md:mt-6 h-full">
                 {selected === "Platea" && (
                   <PlateaVisualization
                     selectedSeats={selectedSeatsList}

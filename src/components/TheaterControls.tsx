@@ -32,37 +32,28 @@ export function TheaterControls({
   const selectedSeatsSet = new Set(selectedSeatsArray);
 
   return (
-    <div className="mb-2 md:mb-4 bg-white p-2 md:p-4 rounded-lg shadow-md">
-      <div
-        className={`grid gap-2 md:gap-4 ${
-          hideAreaSelection
-            ? "grid-cols-1 md:grid-cols-2"
-            : "grid-cols-1 md:grid-cols-3"
-        }`}
-      >
-        {!hideAreaSelection && (
-          <Select
-            label="Area"
-            selectedKeys={[selectedStage]}
-            onSelectionChange={(keys) =>
-              onStageChange(keys.currentKey as Stage)
-            }
-          >
-            <SelectItem key="Platea">Platea</SelectItem>
-            <SelectItem key="Galleria">Galleria</SelectItem>
-            <SelectItem key="Palco">Palco</SelectItem>
-          </Select>
-        )}
+    <div className="space-y-5">
+      {selectedStage === "Platea" && sector && (
+        <div className="flex items-center justify-center gap-2 px-4 py-3 bg-primary-50/50 rounded-xl border border-primary-100">
+          <span className="text-sm font-medium text-gray-600">Settore:</span>
+          <span className="text-xl font-bold text-primary">{sector}</span>
+        </div>
+      )}
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {selectedStage === "Platea" && (
           <>
-            {sector && (
-              <div className="flex items-center justify-center p-2 bg-gray-100 rounded">
-                <strong>Settore:</strong> {sector}
-              </div>
-            )}
             <Select
               label="Fila"
+              variant="flat"
+              color="primary"
+              size="lg"
+              radius="lg"
+              classNames={{
+                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
+                label: "font-semibold text-base",
+                value: "text-lg font-medium",
+              }}
               selectedKeys={[selectedRow]}
               onSelectionChange={(keys) => {
                 onRowChange(keys.currentKey as string);
@@ -83,6 +74,15 @@ export function TheaterControls({
               </>
             </Select>
             <Select
+              variant="flat"
+              color="primary"
+              size="lg"
+              radius="lg"
+              classNames={{
+                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
+                label: "font-semibold text-base",
+                value: "text-lg font-medium",
+              }}
               label={allowMultiple ? "Posti" : "Posto"}
               selectedKeys={
                 allowMultiple ? selectedSeatsSet : selectedSeatsArray
@@ -111,6 +111,15 @@ export function TheaterControls({
           <>
             <Select
               label="Fila"
+              variant="flat"
+              color="primary"
+              size="lg"
+              radius="lg"
+              classNames={{
+                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
+                label: "font-semibold text-base",
+                value: "text-lg font-medium",
+              }}
               selectedKeys={[selectedRow]}
               onSelectionChange={(keys) => {
                 onRowChange(keys.currentKey as string);
@@ -134,6 +143,15 @@ export function TheaterControls({
             </Select>
             <Select
               label={allowMultiple ? "Posti" : "Posto"}
+              variant="flat"
+              color="primary"
+              size="lg"
+              radius="lg"
+              classNames={{
+                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
+                label: "font-semibold text-base",
+                value: "text-lg font-medium",
+              }}
               selectedKeys={
                 allowMultiple ? selectedSeatsSet : selectedSeatsArray
               }
@@ -161,6 +179,15 @@ export function TheaterControls({
           <>
             <Select
               label="Palco"
+              variant="flat"
+              color="primary"
+              size="lg"
+              radius="lg"
+              classNames={{
+                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
+                label: "font-semibold text-base",
+                value: "text-lg font-medium",
+              }}
               selectedKeys={[selectedRow]}
               onSelectionChange={(keys) => {
                 onRowChange(keys.currentKey as string);
@@ -174,6 +201,15 @@ export function TheaterControls({
             </Select>
             <Select
               label={allowMultiple ? "Posti" : "Posto"}
+              variant="flat"
+              color="primary"
+              size="lg"
+              radius="lg"
+              classNames={{
+                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
+                label: "font-semibold text-base",
+                value: "text-lg font-medium",
+              }}
               selectedKeys={
                 allowMultiple ? selectedSeatsSet : selectedSeatsArray
               }
