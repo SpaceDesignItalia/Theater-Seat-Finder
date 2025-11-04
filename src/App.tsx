@@ -123,7 +123,7 @@ function App() {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col overflow-hidden">
+    <div className="h-screen w-screen flex flex-col overflow-auto">
       {/* Sezione superiore fissa con gradiente - altezza minima fissa */}
       <div className="flex-shrink-0 flex flex-col items-center gap-1.5 md:gap-3 pt-2 md:pt-4 pb-1.5 md:pb-3 px-3 md:px-6 bg-gradient-to-b from-purple-50 via-white to-transparent">
         {/* Container per Pulsante Indietro e Logo - layout orizzontale */}
@@ -190,57 +190,14 @@ function App() {
             />
           </div>
         </div>
-
-        {/* Sezione selezionata - compatta */}
-        <AnimatePresence mode="wait">
-          {selected && (
-            <m.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{
-                duration: 0.3,
-              }}
-              className="w-full max-w-4xl px-1 md:px-0"
-            >
-              <div className="flex items-center justify-center gap-2 md:gap-3 bg-white rounded-lg md:rounded-xl shadow-md px-2.5 md:px-4 py-1.5 md:py-3 border border-purple-100">
-                <Icon
-                  icon={getSectionIcon(selected)}
-                  className="text-base md:text-2xl text-purple-600 flex-shrink-0"
-                />
-                <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-[8px] md:text-[10px] font-medium text-gray-500 uppercase tracking-wide">
-                    Sezione
-                  </span>
-                  <span className="text-xs md:text-base font-bold text-purple-700 truncate">
-                    {selected}
-                  </span>
-                </div>
-                {(currentStep === 1 || currentStep === 2) && (
-                  <m.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      setCurrentStep(0);
-                      setSelected(null);
-                    }}
-                    className="p-1.5 md:p-2 rounded-full hover:bg-purple-100 active:bg-purple-200 transition-colors flex-shrink-0 touch-manipulation"
-                    title="Cambia sezione"
-                  >
-                    <Icon
-                      icon="mdi:pencil"
-                      className="text-sm md:text-base text-purple-600"
-                    />
-                  </m.button>
-                )}
-              </div>
-            </m.div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Contenuto centrale */}
-      <div className="flex-1 flex items-center justify-center px-3 md:px-4 overflow-hidden">
+      <div
+        className={`flex-1 flex ${
+          currentStep === 2 ? "items-stretch" : "items-center"
+        } justify-center px-3 md:px-4 ${currentStep === 2 ? "min-h-0" : ""}`}
+      >
         {currentStep === 0 && (
           <div className="w-full max-w-4xl py-2 md:py-0">
             <h1 className="text-xl md:text-4xl font-bold text-center mb-4 md:mb-12 text-gray-800 px-2">
@@ -440,7 +397,7 @@ function App() {
         )}
 
         {currentStep === 2 && stage && (
-          <div className="w-full max-w-7xl h-full flex flex-col">
+          <div className="w-full max-w-7xl flex flex-col self-stretch h-full">
             {/* Header fisso con titolo e info */}
             <div className="flex-shrink-0 py-1 md:py-2">
               <h1 className="text-lg md:text-4xl font-bold text-center mb-2 md:mb-3 text-gray-800 px-2">
@@ -521,7 +478,7 @@ function App() {
 
             {/* Visualizzazione grafica della mappa - scrollabile */}
             {selectedSeatsList.length > 0 && (
-              <div className="flex-1 overflow-y-auto mt-2 md:mt-3 min-h-0">
+              <div className="flex-1 overflow-y-auto mt-2 md:mt-3 min-h-0 max-h-2/3">
                 {selected === "Platea" && (
                   <PlateaVisualization selectedSeats={selectedSeatsList} />
                 )}
