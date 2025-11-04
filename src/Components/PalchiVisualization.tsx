@@ -34,7 +34,7 @@ export function PalchiVisualization({
           WebkitOverflowScrolling: "touch",
         }}
       >
-        <ZoomableContainer minZoom={0.3} maxZoom={3} initialZoom={0.6}>
+        <ZoomableContainer minZoom={0.3} maxZoom={3} initialZoom={0.3}>
           {/* Container principale con i palchi */}
           <div className="flex gap-4 md:gap-6 justify-center items-start min-w-max px-2 md:px-4 pb-4">
             {Array.from({ length: 10 }, (_, i) => (i + 1).toString()).map(

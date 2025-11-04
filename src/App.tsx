@@ -1,7 +1,6 @@
 import { Button } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useState, useEffect, useMemo } from "react";
-import { m, AnimatePresence } from "framer-motion";
 import RowSteps from "./Components/Layout/RowSteps";
 import type { Stage } from "./types";
 import { getValidSeats, getSector } from "./utils/seatsLogic";

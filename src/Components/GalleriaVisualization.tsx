@@ -29,7 +29,7 @@ export function GalleriaVisualization({
           WebkitOverflowScrolling: "touch",
         }}
       >
-        <ZoomableContainer minZoom={0.3} maxZoom={3} initialZoom={0.5}>
+        <ZoomableContainer minZoom={0.3} maxZoom={3} initialZoom={0.2}>
           {/* Container principale con laterali */}
           <div className="flex gap-2 md:gap-4 justify-center items-start min-w-max px-2 md:px-4 pb-4">
             {/* Laterale sinistra */}

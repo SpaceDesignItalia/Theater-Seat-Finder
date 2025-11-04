@@ -45,6 +45,37 @@ export function ZoomableContainer({
     setZoom(initialZoom);
   };
 
+  // Centra lo scroll inizialmente solo se il contenuto è più largo del viewport
+  // Questo permette scroll in entrambe le direzioni senza spazio bianco extra
+  useEffect(() => {
+    const container = containerRef.current;
+    const content = contentRef.current;
+
+    if (!container || !content) return;
+
+    const centerScroll = () => {
+      const containerWidth = container.clientWidth;
+      const contentWidth = content.scrollWidth;
+
+      // Centra solo se il contenuto è più largo del container
+      if (contentWidth > containerWidth) {
+        const scrollLeft = (contentWidth - containerWidth) / 2;
+        container.scrollLeft = scrollLeft;
+      } else {
+        // Se il contenuto è più piccolo, riporta lo scroll a sinistra
+        container.scrollLeft = 0;
+      }
+    };
+
+    // Aspetta che il contenuto sia renderizzato e lo zoom sia applicato
+    setTimeout(centerScroll, 150);
+
+    window.addEventListener("resize", centerScroll);
+    return () => {
+      window.removeEventListener("resize", centerScroll);
+    };
+  }, [zoom]);
+
   // Gestione pinch-to-zoom (solo su mobile)
   useEffect(() => {
     if (!isMobile) return; // Disabilita zoom su desktop
@@ -145,7 +176,7 @@ export function ZoomableContainer({
       {/* Container con zoom */}
       <div
         ref={containerRef}
-        className="w-full h-full overflow-auto touch-pan-y"
+        className="w-full h-full overflow-auto touch-pan-x touch-pan-y"
         style={{
           touchAction: isZooming ? "none" : "pan-x pan-y pinch-zoom",
           WebkitOverflowScrolling: "touch",
@@ -153,12 +184,12 @@ export function ZoomableContainer({
       >
         <div
           ref={contentRef}
-          className="origin-center transition-transform duration-200 ease-out flex items-start justify-center"
+          className="origin-center transition-transform duration-200 ease-out flex items-start justify-start"
           style={{
             transform: `scale(${zoom})`,
             transformOrigin: "center top",
-            minWidth: "100%",
-            minHeight: "100%",
+            width: "fit-content",
+            height: "fit-content",
           }}
         >
           {children}
