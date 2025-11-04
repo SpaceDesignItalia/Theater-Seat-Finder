@@ -54,11 +54,14 @@ export function ZoomableContainer({
     if (!container || !content) return;
 
     const centerScroll = () => {
+      // Forza un reflow per assicurarsi che le dimensioni siano aggiornate
+      void container.offsetHeight;
+
       const containerWidth = container.clientWidth;
       const contentWidth = content.scrollWidth;
 
       // Centra solo se il contenuto è più largo del container
-      if (contentWidth > containerWidth) {
+      if (contentWidth > containerWidth && contentWidth > 0) {
         const scrollLeft = (contentWidth - containerWidth) / 2;
         container.scrollLeft = scrollLeft;
       } else {
@@ -67,14 +70,35 @@ export function ZoomableContainer({
       }
     };
 
-    // Aspetta che il contenuto sia renderizzato e lo zoom sia applicato
-    setTimeout(centerScroll, 150);
+    // Usa requestAnimationFrame per assicurarsi che il rendering sia completo
+    let rafId1: number;
+    let rafId2: number;
+
+    rafId1 = requestAnimationFrame(() => {
+      rafId2 = requestAnimationFrame(() => {
+        centerScroll();
+        // Su mobile, fai un secondo tentativo dopo un breve delay
+        if (isMobile) {
+          setTimeout(() => {
+            centerScroll();
+          }, 100);
+        }
+      });
+    });
+
+    // Fallback con timeout per sicurezza
+    const timeoutId = setTimeout(() => {
+      centerScroll();
+    }, 300);
 
     window.addEventListener("resize", centerScroll);
     return () => {
+      cancelAnimationFrame(rafId1);
+      if (rafId2) cancelAnimationFrame(rafId2);
+      clearTimeout(timeoutId);
       window.removeEventListener("resize", centerScroll);
     };
-  }, [zoom]);
+  }, [zoom, isMobile]);
 
   // Gestione pinch-to-zoom (solo su mobile)
   useEffect(() => {
