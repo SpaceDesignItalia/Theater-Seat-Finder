@@ -1,12 +1,19 @@
 import { useState, useRef, useEffect } from "react";
-import { Icon } from "@iconify/react";
-import { Button } from "@heroui/react";
+
+export interface ZoomControls {
+  zoom: number;
+  handleZoomIn: () => void;
+  handleZoomOut: () => void;
+  handleResetZoom: () => void;
+  isZoomed: boolean;
+}
 
 interface ZoomableContainerProps {
   children: React.ReactNode;
   minZoom?: number;
   maxZoom?: number;
   initialZoom?: number;
+  onControlsReady?: (controls: ZoomControls) => void;
 }
 
 export function ZoomableContainer({
@@ -14,6 +21,7 @@ export function ZoomableContainer({
   minZoom = 0.5,
   maxZoom = 3,
   initialZoom = 1,
+  onControlsReady,
 }: ZoomableContainerProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [zoom, setZoom] = useState(initialZoom);
@@ -44,6 +52,19 @@ export function ZoomableContainer({
   const handleResetZoom = () => {
     setZoom(initialZoom);
   };
+
+  // Espone i controlli tramite callback
+  useEffect(() => {
+    if (onControlsReady) {
+      onControlsReady({
+        zoom,
+        handleZoomIn,
+        handleZoomOut,
+        handleResetZoom,
+        isZoomed: zoom !== initialZoom,
+      });
+    }
+  }, [zoom, onControlsReady, initialZoom]);
 
   // Centra lo scroll inizialmente solo se il contenuto è più largo del viewport
   // Questo permette scroll in entrambe le direzioni senza spazio bianco extra
@@ -162,41 +183,6 @@ export function ZoomableContainer({
 
   return (
     <div className="relative w-full">
-      {/* Controlli zoom */}
-      <div className="fixed bottom-24 md:bottom-8 right-3 md:right-6 z-30 flex flex-col gap-2">
-        {zoom !== initialZoom && (
-          <Button
-            onPress={handleResetZoom}
-            size="sm"
-            isIconOnly
-            className="bg-white shadow-lg hover:bg-gray-50 touch-manipulation min-w-[44px] min-h-[44px]"
-            aria-label="Reset zoom"
-          >
-            <Icon icon="mdi:fit-to-screen" className="text-xl" />
-          </Button>
-        )}
-        <Button
-          onPress={handleZoomIn}
-          size="sm"
-          isIconOnly
-          className="bg-white shadow-lg hover:bg-gray-50 touch-manipulation min-w-[44px] min-h-[44px]"
-          aria-label="Zoom in"
-          isDisabled={zoom >= maxZoom}
-        >
-          <Icon icon="mdi:plus" className="text-xl" />
-        </Button>
-        <Button
-          onPress={handleZoomOut}
-          size="sm"
-          isIconOnly
-          className="bg-white shadow-lg hover:bg-gray-50 touch-manipulation min-w-[44px] min-h-[44px]"
-          aria-label="Zoom out"
-          isDisabled={zoom <= minZoom}
-        >
-          <Icon icon="mdi:minus" className="text-xl" />
-        </Button>
-      </div>
-
       {/* Container con zoom */}
       <div
         ref={containerRef}
@@ -219,13 +205,6 @@ export function ZoomableContainer({
           {children}
         </div>
       </div>
-
-      {/* Indicatore zoom */}
-      {zoom !== initialZoom && (
-        <div className="fixed top-24 md:top-28 right-3 md:right-6 z-30 bg-white/95 backdrop-blur-sm shadow-lg rounded-full px-3 py-1.5 text-xs font-semibold text-gray-700 border border-gray-200">
-          {Math.round(zoom * 100)}%
-        </div>
-      )}
     </div>
   );
 }

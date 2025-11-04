@@ -21,7 +21,7 @@ function App() {
 
   // Array di posti selezionati (possono essere su file diverse)
   const [selectedSeatsList, setSelectedSeatsList] = useState<
-    Array<{ row: string; seat: string }>
+    Array<{ row: string; seat: string; sector: string }>
   >([]);
 
   const sections = [
@@ -44,19 +44,6 @@ function App() {
       description: "Posti nei palchi",
     },
   ] as const;
-
-  const getSectionIcon = (sectionKey: SectionType) => {
-    switch (sectionKey) {
-      case "Platea":
-        return "mdi:seat";
-      case "Galleria":
-        return "mdi:stairs";
-      case "Palchi":
-        return "mdi:crown";
-      default:
-        return "mdi:seat";
-    }
-  };
 
   // Converte SectionType in Stage
   const stage = selected === "Palchi" ? "Palco" : (selected as Stage | null);
@@ -103,21 +90,29 @@ function App() {
       return;
     }
 
-    const newSeat = { row: selectedRow, seat: selectedSeat };
+    const newSeat = { row: selectedRow, seat: selectedSeat, sector: sector };
     // Controlla se il posto è già nella lista
     const exists = selectedSeatsList.some(
-      (s) => s.row === newSeat.row && s.seat === newSeat.seat
+      (s) =>
+        s.row === newSeat.row &&
+        s.seat === newSeat.seat &&
+        s.sector === newSeat.sector
     );
 
     if (!exists) {
-      setSelectedSeatsList((prev) => [...prev, newSeat]);
+      setSelectedSeatsList((prev) => [
+        ...prev,
+        { row: selectedRow, seat: selectedSeat, sector: sector as string },
+      ]);
     }
   };
 
   // Funzione per rimuovere un posto dalla lista
-  const handleRemoveSeat = (row: string, seat: string) => {
+  const handleRemoveSeat = (row: string, seat: string, sector: string) => {
     setSelectedSeatsList((prev) =>
-      prev.filter((s) => !(s.row === row && s.seat === seat))
+      prev.filter(
+        (s) => !(s.row === row && s.seat === seat && s.sector === sector)
+      )
     );
   };
 
@@ -159,7 +154,7 @@ function App() {
             <img
               src="/logo.png"
               alt="Logo Teatro"
-              className="h-14 md:h-28 object-contain drop-shadow-md"
+              className="h-18 md:h-28 object-contain drop-shadow-md"
             />
           </div>
 
@@ -168,13 +163,13 @@ function App() {
         </div>
 
         {/* Navigazione e Steps */}
-        <div className="flex flex-col md:flex-row gap-1.5 md:gap-2 items-center justify-center w-full max-w-4xl mx-auto px-2">
+        <div className="flex flex-col md:flex-row gap-1.5 md:gap-2 items-center justify-center w-full max-w-4xl mx-auto">
           <div className="flex items-center justify-center w-full overflow-hidden">
             <RowSteps
               currentStep={currentStep}
               onStepChange={setCurrentStep}
               allowStepClick={false}
-              className="w-full max-w-lg scale-90 md:scale-100"
+              className="w-full max-w-lg scale-75 md:scale-85 -ml-10 -mt-4"
               steps={[
                 {
                   title: "Scelta posizione",
@@ -343,11 +338,16 @@ function App() {
                             className="text-lg  flex-shrink-0"
                           />
                         </div>
-                        <span className="font-bold text-sm md:text-base  tracking-wide">
+                        <span className="flex flex-col items-center gap-1 font-bold text-sm md:text-base tracking-wide">
+                          <span className="text-xs md:text-xs font-medium text-gray-500">
+                            {seat.sector}
+                          </span>
                           {seat.row}-{seat.seat}
                         </span>
                         <button
-                          onClick={() => handleRemoveSeat(seat.row, seat.seat)}
+                          onClick={() =>
+                            handleRemoveSeat(seat.row, seat.seat, seat.sector)
+                          }
                           className="p-1.5 rounded-full bg-white/20 hover:bg-red-500  hover:rotate-90 transition-all duration-300 group-hover:bg-white/30 active:scale-90"
                           title="Rimuovi posto"
                         >
@@ -410,22 +410,6 @@ function App() {
                   {/* Info Section */}
                   <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 w-full md:w-auto">
                     {/* Sezione */}
-                    <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-3 border border-primary-100 hover:shadow-lg transition-all duration-200">
-                      <div className="p-2 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg shadow-sm">
-                        <Icon
-                          icon={getSectionIcon(selected)}
-                          className="text-2xl md:text-3xl text-white"
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-[10px] md:text-xs font-semibold text-primary-600 uppercase tracking-wider">
-                          Sezione
-                        </span>
-                        <span className="text-base md:text-xl font-bold text-gray-900">
-                          {selected}
-                        </span>
-                      </div>
-                    </div>
 
                     {/* Divider verticale nascosto su mobile */}
                     <div className="hidden md:block w-px h-12 bg-gradient-to-b from-transparent via-primary-300 to-transparent"></div>

@@ -1,12 +1,16 @@
+import { useState } from "react";
 import type { PlateaVisualizationProps } from "../types";
 import { getValidSeats } from "../utils/seatsLogic";
 import { Seat } from "./Seat";
-import { ZoomableContainer } from "./ZoomableContainer";
+import { ZoomableContainer, type ZoomControls } from "./ZoomableContainer";
+import { Button } from "@heroui/react";
+import { Icon } from "@iconify/react";
 
 export function PalchiVisualization({
   selectedSeats,
   onSeatClick,
 }: PlateaVisualizationProps) {
+  const [zoomControls, setZoomControls] = useState<ZoomControls | null>(null);
   // Funzione per ottenere i posti di un palco
   const getPalcoSeats = (palcoNum: string): string[] => {
     return getValidSeats(palcoNum, "Palco");
@@ -22,8 +26,51 @@ export function PalchiVisualization({
     <div className="w-full bg-white rounded-lg shadow-lg">
       {/* Titolo - sticky su mobile */}
       <div className="sticky top-0 z-20 bg-white p-2 md:p-3 border-b md:border-b-0 mb-1 md:mb-3">
-        <div className="text-center">
-          <h2 className="text-xl md:text-2xl font-bold">PALCHI</h2>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex-1"></div>
+          <div className="text-center flex-1">
+            <h2 className="text-xl md:text-2xl font-bold">PALCHI</h2>
+          </div>
+          <div className="flex-1 flex justify-end">
+            {zoomControls && (
+              <div className="flex items-center gap-1">
+                {zoomControls.isZoomed && (
+                  <Button
+                    onPress={zoomControls.handleResetZoom}
+                    size="sm"
+                    isIconOnly
+                    className="bg-white shadow-md hover:bg-gray-50 touch-manipulation min-w-[36px] min-h-[36px]"
+                    aria-label="Reset zoom"
+                  >
+                    <Icon icon="mdi:fit-to-screen" className="text-lg" />
+                  </Button>
+                )}
+                <Button
+                  onPress={zoomControls.handleZoomOut}
+                  size="sm"
+                  isIconOnly
+                  className="bg-white shadow-md hover:bg-gray-50 touch-manipulation min-w-[36px] min-h-[36px]"
+                  aria-label="Zoom out"
+                >
+                  <Icon icon="mdi:minus" className="text-lg" />
+                </Button>
+                <Button
+                  onPress={zoomControls.handleZoomIn}
+                  size="sm"
+                  isIconOnly
+                  className="bg-white shadow-md hover:bg-gray-50 touch-manipulation min-w-[36px] min-h-[36px]"
+                  aria-label="Zoom in"
+                >
+                  <Icon icon="mdi:plus" className="text-lg" />
+                </Button>
+                {zoomControls.isZoomed && (
+                  <span className="text-xs font-semibold text-gray-600 ml-1">
+                    {Math.round(zoomControls.zoom * 100)}%
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -34,7 +81,12 @@ export function PalchiVisualization({
           WebkitOverflowScrolling: "touch",
         }}
       >
-        <ZoomableContainer minZoom={0.3} maxZoom={3} initialZoom={0.3}>
+        <ZoomableContainer
+          minZoom={0.333}
+          maxZoom={3}
+          initialZoom={0.333}
+          onControlsReady={setZoomControls}
+        >
           {/* Container principale con i palchi */}
           <div className="flex gap-4 md:gap-6 justify-center items-start min-w-max px-2 md:px-4 pb-4">
             {Array.from({ length: 10 }, (_, i) => (i + 1).toString()).map(

@@ -22,6 +22,15 @@ export function getSector(row: string): string | null {
 
   if (isNaN(rowNum)) {
     // Fila letterale (A, B) o laterale (DX, SX) - nessun settore specificato
+    // Primo settore: file da 1 a 8
+    if (row === "A" || row === "B") {
+      return "Primo Settore";
+    }
+
+    if (row === "DX" || row === "SX") {
+      return "Laterale";
+    }
+
     return null;
   }
 

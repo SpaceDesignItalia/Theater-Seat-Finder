@@ -86,7 +86,9 @@ export function SeatRow({
                   String(s.row) === String(rowLabel) &&
                   String(s.seat) === String(seat)
               )}
-              onClick={onSeatClick ? () => onSeatClick(rowLabel, seat) : undefined}
+              onClick={
+                onSeatClick ? () => onSeatClick(rowLabel, seat) : undefined
+              }
             />
           ))}
           {/* Spazi vuoti dopo i posti (verso il centro) - se necessario */}
@@ -94,7 +96,7 @@ export function SeatRow({
             Array.from({ length: emptySpaces }, (_, i) => (
               <div
                 key={`empty-left-${i}`}
-                className="w-6 h-6 sm:w-7 sm:h-7"
+                className="w-11 h-11 sm:w-12 sm:h-12 md:w-7 md:h-7 empty-left"
               ></div>
             ))}
         </div>
@@ -113,7 +115,7 @@ export function SeatRow({
             Array.from({ length: emptySpaces }, (_, i) => (
               <div
                 key={`empty-right-${i}`}
-                className="w-6 h-6 sm:w-7 sm:h-7"
+                className="w-11 h-11 sm:w-12 sm:h-12 md:w-7 md:h-7 empty-right"
               ></div>
             ))}
           {[...evenSeats, ...rightBis].map((seat) => (
@@ -127,7 +129,9 @@ export function SeatRow({
                   String(s.row) === String(rowLabel) &&
                   String(s.seat) === String(seat)
               )}
-              onClick={onSeatClick ? () => onSeatClick(rowLabel, seat) : undefined}
+              onClick={
+                onSeatClick ? () => onSeatClick(rowLabel, seat) : undefined
+              }
             />
           ))}
         </div>
