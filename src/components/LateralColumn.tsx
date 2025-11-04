@@ -20,7 +20,7 @@ export function LateralColumn({
             (s) =>
               String(s.row) === String(side) && String(s.seat) === String(seat)
           )}
-          onClick={() => onSeatClick(side, seat)}
+          onClick={onSeatClick ? () => onSeatClick(side, seat) : undefined}
         />
       ))}
     </div>

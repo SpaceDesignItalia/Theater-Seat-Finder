@@ -12,7 +12,7 @@ createRoot(document.getElementById("root")!).render(
       <HeroUIProvider>
         <ToastProvider placement="top-right" toastOffset={5} />
         <BrowserRouter>
-          <main className="text-foreground bg-background">
+          <main className="text-foreground bg-background h-full w-full">
             <App />
           </main>
         </BrowserRouter>

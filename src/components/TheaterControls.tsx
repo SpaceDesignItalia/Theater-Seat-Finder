@@ -1,4 +1,4 @@
-import { Select, SelectItem } from "@heroui/react";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import type { Stage } from "../types";
 
 interface TheaterControlsProps {
@@ -20,216 +20,188 @@ export function TheaterControls({
   selectedSeat,
   validSeats,
   sector,
-  hideAreaSelection = false,
   allowMultiple = false,
-  onStageChange,
   onRowChange,
   onSeatChange,
 }: TheaterControlsProps) {
   const selectedSeatsArray = Array.isArray(selectedSeat)
     ? selectedSeat
     : [selectedSeat];
-  const selectedSeatsSet = new Set(selectedSeatsArray);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3 md:space-y-5">
       {selectedStage === "Platea" && sector && (
-        <div className="flex items-center justify-center gap-2 px-4 py-3 bg-primary-50/50 rounded-xl border border-primary-100">
-          <span className="text-sm font-medium text-gray-600">Settore:</span>
-          <span className="text-xl font-bold text-primary">{sector}</span>
+        <div className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 md:py-3 bg-primary-50/50 rounded-lg md:rounded-xl border border-primary-100">
+          <span className="text-xs md:text-sm font-medium text-gray-600">
+            Settore:
+          </span>
+          <span className="text-lg md:text-xl font-bold text-primary">
+            {sector}
+          </span>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
         {selectedStage === "Platea" && (
           <>
-            <Select
+            <Autocomplete
               label="Fila"
-              variant="flat"
+              variant="bordered"
               color="primary"
               size="lg"
               radius="lg"
-              classNames={{
-                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
-                label: "font-semibold text-base",
-                value: "text-lg font-medium",
-              }}
-              selectedKeys={[selectedRow]}
-              onSelectionChange={(keys) => {
-                onRowChange(keys.currentKey as string);
+              selectedKey={selectedRow}
+              onSelectionChange={(key) => {
+                onRowChange(key as string);
               }}
             >
               <>
-                <SelectItem key="A">A</SelectItem>
-                <SelectItem key="B">B</SelectItem>
+                <AutocompleteItem key="A">A</AutocompleteItem>
+                <AutocompleteItem key="B">B</AutocompleteItem>
                 {Array.from({ length: 22 }, (_, index) => index + 1).map(
                   (row) => (
-                    <SelectItem key={row.toString()}>
+                    <AutocompleteItem key={row.toString()}>
                       {row.toString()}
-                    </SelectItem>
+                    </AutocompleteItem>
                   )
                 )}
-                <SelectItem key="DX">DX</SelectItem>
-                <SelectItem key="SX">SX</SelectItem>
+                <AutocompleteItem key="DX">DX</AutocompleteItem>
+                <AutocompleteItem key="SX">SX</AutocompleteItem>
               </>
-            </Select>
-            <Select
-              variant="flat"
+            </Autocomplete>
+            <Autocomplete
+              variant="bordered"
               color="primary"
               size="lg"
               radius="lg"
-              classNames={{
-                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
-                label: "font-semibold text-base",
-                value: "text-lg font-medium",
-              }}
               label={allowMultiple ? "Posti" : "Posto"}
-              selectedKeys={
-                allowMultiple ? selectedSeatsSet : selectedSeatsArray
+              selectedKey={
+                allowMultiple ? selectedSeatsArray[0] : selectedSeatsArray[0]
               }
-              selectionMode={allowMultiple ? "multiple" : "single"}
-              onSelectionChange={(keys) => {
+              onSelectionChange={(key) => {
                 if (allowMultiple) {
-                  const selectedArray = Array.from(keys) as string[];
-                  onSeatChange(selectedArray);
+                  onSeatChange([key as string]);
                 } else {
-                  const selectedKey = keys.currentKey as string;
-                  if (selectedKey) {
-                    onSeatChange(selectedKey);
+                  if (key) {
+                    onSeatChange(key as string);
                   }
                 }
               }}
             >
               {validSeats.map((seat) => (
-                <SelectItem key={seat}>{seat}</SelectItem>
+                <AutocompleteItem key={seat}>{seat}</AutocompleteItem>
               ))}
-            </Select>
+            </Autocomplete>
           </>
         )}
 
         {selectedStage === "Galleria" && (
           <>
-            <Select
+            <Autocomplete
               label="Fila"
-              variant="flat"
+              variant="bordered"
               color="primary"
               size="lg"
               radius="lg"
-              classNames={{
-                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
-                label: "font-semibold text-base",
-                value: "text-lg font-medium",
-              }}
-              selectedKeys={[selectedRow]}
-              onSelectionChange={(keys) => {
-                onRowChange(keys.currentKey as string);
+              selectedKey={selectedRow}
+              onSelectionChange={(key) => {
+                onRowChange(key as string);
               }}
             >
               <>
-                <SelectItem key="A">A</SelectItem>
-                <SelectItem key="1">1</SelectItem>
+                <AutocompleteItem key="A">A</AutocompleteItem>
+                <AutocompleteItem key="1">1</AutocompleteItem>
                 {Array.from({ length: 5 }, (_, index) => index + 2).map(
                   (row) => (
-                    <SelectItem key={row.toString()}>
+                    <AutocompleteItem key={row.toString()}>
                       {row.toString()}
-                    </SelectItem>
+                    </AutocompleteItem>
                   )
                 )}
-                <SelectItem key="A-SX">A-SX (Laterale Sinistra)</SelectItem>
-                <SelectItem key="A-DX">A-DX (Laterale Destra)</SelectItem>
-                <SelectItem key="1-SX">1-SX (Laterale Sinistra)</SelectItem>
-                <SelectItem key="1-DX">1-DX (Laterale Destra)</SelectItem>
+                <AutocompleteItem key="A-SX">
+                  A-SX (Laterale Sinistra)
+                </AutocompleteItem>
+                <AutocompleteItem key="A-DX">
+                  A-DX (Laterale Destra)
+                </AutocompleteItem>
+                <AutocompleteItem key="1-SX">
+                  1-SX (Laterale Sinistra)
+                </AutocompleteItem>
+                <AutocompleteItem key="1-DX">
+                  1-DX (Laterale Destra)
+                </AutocompleteItem>
               </>
-            </Select>
-            <Select
+            </Autocomplete>
+            <Autocomplete
               label={allowMultiple ? "Posti" : "Posto"}
-              variant="flat"
+              variant="bordered"
               color="primary"
               size="lg"
               radius="lg"
-              classNames={{
-                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
-                label: "font-semibold text-base",
-                value: "text-lg font-medium",
-              }}
-              selectedKeys={
-                allowMultiple ? selectedSeatsSet : selectedSeatsArray
+              selectedKey={
+                allowMultiple ? selectedSeatsArray[0] : selectedSeatsArray[0]
               }
-              selectionMode={allowMultiple ? "multiple" : "single"}
-              onSelectionChange={(keys) => {
+              onSelectionChange={(key) => {
                 if (allowMultiple) {
-                  const selectedArray = Array.from(keys) as string[];
-                  onSeatChange(selectedArray);
+                  onSeatChange([key as string]);
                 } else {
-                  const selectedKey = keys.currentKey as string;
-                  if (selectedKey) {
-                    onSeatChange(selectedKey);
+                  if (key) {
+                    onSeatChange(key as string);
                   }
                 }
               }}
             >
               {validSeats.map((seat) => (
-                <SelectItem key={seat}>{seat}</SelectItem>
+                <AutocompleteItem key={seat}>{seat}</AutocompleteItem>
               ))}
-            </Select>
+            </Autocomplete>
           </>
         )}
 
         {selectedStage === "Palco" && (
           <>
-            <Select
+            <Autocomplete
               label="Palco"
-              variant="flat"
+              variant="bordered"
               color="primary"
               size="lg"
               radius="lg"
-              classNames={{
-                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
-                label: "font-semibold text-base",
-                value: "text-lg font-medium",
-              }}
-              selectedKeys={[selectedRow]}
-              onSelectionChange={(keys) => {
-                onRowChange(keys.currentKey as string);
+              selectedKey={selectedRow}
+              onSelectionChange={(key) => {
+                onRowChange(key as string);
               }}
             >
               {Array.from({ length: 10 }, (_, index) => index + 1).map(
                 (palco) => (
-                  <SelectItem key={palco.toString()}>Palco {palco}</SelectItem>
+                  <AutocompleteItem key={palco.toString()}>
+                    Palco {palco}
+                  </AutocompleteItem>
                 )
               )}
-            </Select>
-            <Select
+            </Autocomplete>
+            <Autocomplete
               label={allowMultiple ? "Posti" : "Posto"}
-              variant="flat"
+              variant="bordered"
               color="primary"
               size="lg"
               radius="lg"
-              classNames={{
-                trigger: "shadow-sm hover:shadow-md transition-shadow bg-white",
-                label: "font-semibold text-base",
-                value: "text-lg font-medium",
-              }}
-              selectedKeys={
-                allowMultiple ? selectedSeatsSet : selectedSeatsArray
+              selectedKey={
+                allowMultiple ? selectedSeatsArray[0] : selectedSeatsArray[0]
               }
-              selectionMode={allowMultiple ? "multiple" : "single"}
-              onSelectionChange={(keys) => {
+              onSelectionChange={(key) => {
                 if (allowMultiple) {
-                  const selectedArray = Array.from(keys) as string[];
-                  onSeatChange(selectedArray);
+                  onSeatChange([key as string]);
                 } else {
-                  const selectedKey = keys.currentKey as string;
-                  if (selectedKey) {
-                    onSeatChange(selectedKey);
+                  if (key) {
+                    onSeatChange(key as string);
                   }
                 }
               }}
             >
               {validSeats.map((seat) => (
-                <SelectItem key={seat}>{seat}</SelectItem>
+                <AutocompleteItem key={seat}>{seat}</AutocompleteItem>
               ))}
-            </Select>
+            </Autocomplete>
           </>
         )}
       </div>

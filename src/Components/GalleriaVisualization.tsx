@@ -16,23 +16,20 @@ export function GalleriaVisualization({
   return (
     <div className="w-full bg-white rounded-lg shadow-lg">
       {/* Titolo - sticky su mobile */}
-      <div className="sticky top-0 z-20 bg-white p-2 md:p-4 border-b md:border-b-0 mb-2 md:mb-6">
+      <div className="sticky top-0 z-20 bg-white p-2 md:p-3 border-b md:border-b-0 mb-1 md:mb-3">
         <div className="text-center">
-          <h2 className="text-xl md:text-2xl font-bold mb-1 md:mb-2">
-            GALLERIA
-          </h2>
+          <h2 className="text-xl md:text-2xl font-bold">GALLERIA</h2>
         </div>
       </div>
 
       {/* Container scrollabile e zoomabile per mobile */}
       <div
-        className="overflow-auto overscroll-contain"
+        className="overflow-auto overscroll-contain h-full"
         style={{
           WebkitOverflowScrolling: "touch",
-          maxHeight: "calc(100vh - 200px)",
         }}
       >
-        <ZoomableContainer minZoom={0.5} maxZoom={3} initialZoom={1}>
+        <ZoomableContainer minZoom={0.3} maxZoom={3} initialZoom={0.5}>
           {/* Container principale con laterali */}
           <div className="flex gap-2 md:gap-4 justify-center items-start min-w-max px-2 md:px-4 pb-4">
             {/* Laterale sinistra */}

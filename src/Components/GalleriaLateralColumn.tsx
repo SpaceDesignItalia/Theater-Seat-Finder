@@ -5,7 +5,7 @@ interface GalleriaLateralColumnProps {
   rowLabel: string;
   seats: string[];
   selectedSeats: LateralColumnProps["selectedSeats"];
-  onSeatClick: (row: string, seat: string) => void;
+  onSeatClick?: (row: string, seat: string) => void;
 }
 
 export function GalleriaLateralColumn({
@@ -55,7 +55,7 @@ export function GalleriaLateralColumn({
                   String(s.row) === String(rowLabel) &&
                   String(s.seat) === String(seat)
               )}
-              onClick={() => onSeatClick(rowLabel, seat)}
+              onClick={onSeatClick ? () => onSeatClick(rowLabel, seat) : undefined}
             />
           ))}
         </div>
@@ -73,7 +73,7 @@ export function GalleriaLateralColumn({
                   String(s.row) === String(rowLabel) &&
                   String(s.seat) === String(seat)
               )}
-              onClick={() => onSeatClick(rowLabel, seat)}
+              onClick={onSeatClick ? () => onSeatClick(rowLabel, seat) : undefined}
             />
           ))}
         </div>

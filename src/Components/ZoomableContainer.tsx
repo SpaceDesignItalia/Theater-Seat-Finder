@@ -107,36 +107,38 @@ export function ZoomableContainer({
 
   return (
     <div className="relative w-full">
-      {/* Controlli zoom (solo su mobile) */}
-      <div className="md:hidden fixed bottom-20 right-4 z-30 flex flex-col gap-2">
+      {/* Controlli zoom */}
+      <div className="fixed bottom-24 md:bottom-8 right-3 md:right-6 z-30 flex flex-col gap-2">
         {zoom !== initialZoom && (
           <Button
             onPress={handleResetZoom}
             size="sm"
             isIconOnly
-            className="bg-white shadow-lg"
+            className="bg-white shadow-lg hover:bg-gray-50 touch-manipulation min-w-[44px] min-h-[44px]"
             aria-label="Reset zoom"
           >
-            <Icon icon="mdi:fit-to-screen" className="text-lg" />
+            <Icon icon="mdi:fit-to-screen" className="text-xl" />
           </Button>
         )}
         <Button
           onPress={handleZoomIn}
           size="sm"
           isIconOnly
-          className="bg-white shadow-lg"
+          className="bg-white shadow-lg hover:bg-gray-50 touch-manipulation min-w-[44px] min-h-[44px]"
           aria-label="Zoom in"
+          isDisabled={zoom >= maxZoom}
         >
-          <Icon icon="mdi:plus" className="text-lg" />
+          <Icon icon="mdi:plus" className="text-xl" />
         </Button>
         <Button
           onPress={handleZoomOut}
           size="sm"
           isIconOnly
-          className="bg-white shadow-lg"
+          className="bg-white shadow-lg hover:bg-gray-50 touch-manipulation min-w-[44px] min-h-[44px]"
           aria-label="Zoom out"
+          isDisabled={zoom <= minZoom}
         >
-          <Icon icon="mdi:minus" className="text-lg" />
+          <Icon icon="mdi:minus" className="text-xl" />
         </Button>
       </div>
 
@@ -151,21 +153,21 @@ export function ZoomableContainer({
       >
         <div
           ref={contentRef}
-          className="origin-top-left transition-transform duration-200 ease-out"
+          className="origin-center transition-transform duration-200 ease-out flex items-start justify-center"
           style={{
-            transform: isMobile ? `scale(${zoom})` : "scale(1)",
-            transformOrigin: "top left",
-            width: isMobile ? `${100 / zoom}%` : "100%",
-            minHeight: isMobile ? `${100 / zoom}%` : "auto",
+            transform: `scale(${zoom})`,
+            transformOrigin: "center top",
+            minWidth: "100%",
+            minHeight: "100%",
           }}
         >
           {children}
         </div>
       </div>
 
-      {/* Indicatore zoom su mobile */}
+      {/* Indicatore zoom */}
       {zoom !== initialZoom && (
-        <div className="md:hidden fixed top-20 right-4 z-30 bg-white shadow-lg rounded-full px-3 py-1.5 text-xs font-semibold">
+        <div className="fixed top-24 md:top-28 right-3 md:right-6 z-30 bg-white/95 backdrop-blur-sm shadow-lg rounded-full px-3 py-1.5 text-xs font-semibold text-gray-700 border border-gray-200">
           {Math.round(zoom * 100)}%
         </div>
       )}

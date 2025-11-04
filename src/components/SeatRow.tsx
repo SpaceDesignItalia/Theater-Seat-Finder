@@ -86,7 +86,7 @@ export function SeatRow({
                   String(s.row) === String(rowLabel) &&
                   String(s.seat) === String(seat)
               )}
-              onClick={() => onSeatClick(rowLabel, seat)}
+              onClick={onSeatClick ? () => onSeatClick(rowLabel, seat) : undefined}
             />
           ))}
           {/* Spazi vuoti dopo i posti (verso il centro) - se necessario */}
@@ -127,7 +127,7 @@ export function SeatRow({
                   String(s.row) === String(rowLabel) &&
                   String(s.seat) === String(seat)
               )}
-              onClick={() => onSeatClick(rowLabel, seat)}
+              onClick={onSeatClick ? () => onSeatClick(rowLabel, seat) : undefined}
             />
           ))}
         </div>
